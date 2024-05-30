@@ -1,0 +1,136 @@
+#text-area-holder{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#add-image-span, #button-del{
+  display: flex;
+  width: 50%;
+  font-size: small;
+  margin: 0px;
+}
+
+#preview {
+  font-weight: normal;
+  padding: 10px;
+  color: gray;
+}
+
+#form-card form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#form-card .form-div{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#form-card .text-div {
+  flex-direction: row;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+}
+
+#form-card textarea {
+  resize: none;
+}
+
+#form-card .input {
+  transition-duration: .5s;
+  background-color: rgb(255, 255, 255);
+  padding: 7px 15px;
+  margin-left: 5px;
+  border: 0px;
+}
+
+#form-card .input:hover {
+  outline: none;
+  transition-duration:.5s;
+  border: 0px;
+  background-color: rgb(220, 220, 220);
+}
+
+#form-card {
+  background-color: transparent;
+  width: 60%;
+  margin: 30px;
+  padding: 10px;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+}
+
+#central{
+  color:black;
+  align-items: center;
+}
+
+div#button-text{
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 0px;
+  align-items: center;
+}
+
+div#button-del{
+  margin-bottom: 10px;
+  padding-top:0px;
+}
+
+footer {
+  background-color: rgb(121, 163, 255);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: aliceblue;
+  font-family: Arial;
+  position: fixed;
+  font-size:1vw;
+  bottom: 0;
+  width: 100%;
+}
+
+input[type=file] {
+  opacity: 0;
+  width: 0.1px;
+	height: 0.1px;
+}
+
+label[for=addImage] {
+  padding:5px 15px;
+  font-weight: bold;
+  background:rgb(235,235,235); 
+  margin: 0px;
+  width: 100%;
+  border:0 none;
+  cursor:pointer;
+}
+
+button{
+  padding:5px 15px; 
+  font-weight: bold;
+  width: 100%;
+  background:rgb(235,235,235); 
+  border:0 none;
+  cursor:pointer;
+}
+
+input[type=submit] {
+  padding:7px 20px; 
+  font-weight: bold;
+  background:rgb(235,235,235); 
+  border:0 none;
+  cursor:pointer;
+}
+
+label{
+  margin: 10px;
+}
+

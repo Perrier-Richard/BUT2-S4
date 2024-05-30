@@ -1,0 +1,38 @@
+html, body{
+    margin: 0;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color:white;
+}
+
+.section-box {
+    border-radius: 7px;
+}
+
+#central {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+}
+
+footer{
+    bottom: 0;
+    margin: auto;
+}
+
+@media (max-width:600px) {
+    #central {
+        width: 100%;
+    }
+}

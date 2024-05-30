@@ -1,0 +1,98 @@
+
+#add-ticket-holder {
+    display: flex;
+    justify-content: center;
+}
+
+#add-ticket {
+    background-color: rgb(235, 235, 235);
+    border-radius: 50px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: 0px;
+}
+
+#add-ticket:hover {
+    background-color: rgb(220,220,220);
+}
+
+#liste-billets {
+    margin: 30px;
+    padding: 20px 30px;
+}
+
+#page-selector {
+    color: black;
+    font-weight: bold;
+    background-color: rgb(235,235,235);
+    margin: 62px 40%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#page-selector button {
+    color: black;
+    font-weight: bold;
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+hr {
+    opacity: 0.5;
+}
+
+.selector {
+    margin: 10px 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.billet:hover {
+    background-color: rgb(245,245,245);
+}
+
+.detail-billet {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.text-billet {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.titre-billet {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 35px;
+    color: black;
+}
+
+.detail-billet {
+    color:gray;
+}
+
+.contenu-billet {
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: gray;
+}
+
+@media (max-width:600px) {
+    #liste-billets {
+        margin: 0px;
+        border-radius: 0px;
+        padding: 10px 10px;
+        background: transparent;
+    }
+    #page-selector {
+        margin: 0px;
+        margin-bottom: 52px;
+    }
+}

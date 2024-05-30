@@ -1,0 +1,76 @@
+#PageMention{
+    background: rgb(255, 255, 255);
+    color:black;
+    margin:30px;
+    padding: 20px 30px;
+    border-radius: 15px;
+    font-size: 100%;
+}
+
+main{
+    background: aliceblue;
+}
+
+p{
+    color:black;
+}
+
+strong{
+    font-size: 115%;
+}
+
+
+strong{
+    font-size: 115%;
+}
+
+h1{
+    padding: 10px;
+}
+
+h1:hover{
+    color: darkgrey;
+    transition-duration: 0.2s;
+    padding: 10px;
+}
+
+.PageMention{
+    background: rgb(255, 255, 255);
+    color:black;
+    margin: 30px;
+    padding: 20px 30px;
+    border-radius: 15px;
+    margin-bottom: 5%;
+    font-size: 100%;
+}
+
+
+.btn:hover{
+    transition-duration: 0.2s;
+}
+
+.btn:hover .icone{
+    transform: rotate(360deg);
+    transition-duration: 0.5s;
+}
+
+.btn{
+    background:rgb(121, 163, 255);
+    height:30px;
+    width: 30px;
+    border-radius: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 20px;
+    bottom: 40px;
+    cursor:pointer;
+}
+
+.icone{
+    width: 20px;
+}
+
+
+
