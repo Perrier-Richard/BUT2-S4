@@ -1,0 +1,65 @@
+#edit-text{
+	float: left;
+	min-width: 45%;
+}
+
+#preview {
+  font-weight: normal;
+  padding: 10px;
+  margin: 0px;
+  color: gray;
+  line-break: anywhere;
+  min-width: 45%;
+}
+
+.text-div {
+	padding: 10px 0 10px 0;
+}
+
+.text-div .paraph-text{
+  flex-direction: row;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+}
+
+.text-div .paraph-text textarea {
+  resize: none;
+}
+
+.sondage-div{
+	display: grid;
+	padding: 10px 0 10px 0;
+}
+
+.sondage-div button{
+	margin: 0 10px 0 10px;
+}
+
+.sondage-div .sondage-choice{
+	padding: 5px 0 5px 0;
+	display: inline-flex;
+}
+
+.sondage-div .sondage-choice input[type=radio]{
+	width: 16px;
+}
+
+.sondage-div .sondage-choice input[type=text]{
+	border: none;
+	padding: 10px;
+}
+
+.image-div{
+	padding: 10px 0 10px 0;
+}
+
+.image-div .image-preview{
+	width: 80%;
+	padding: 20px 0 20px 0;
+	margin: 0 auto;
+}
+
+.image-div button{
+	margin: 0 10px 0 10px;
+}

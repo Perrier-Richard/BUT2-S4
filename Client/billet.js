@@ -39,11 +39,17 @@ function initTicket() {
         '/tickets/getTicket','GET',{id:ticket_id},
         function (obj) {
             if ( !('error' in obj) ) {
-                document.querySelector('#titre-billet').innerHTML = obj.result['titre'];
+                console.log(obj);
+                console.log(obj.content);
+                document.querySelector('#titre-billet').innerHTML = obj.ticket['titre'];
                 let converter = new showdown.Converter();
-                document.querySelector('#contenu-billet').innerHTML = converter.makeHtml(utils.removeTags(obj.result['content']));
-                if (obj.result['image'] != null) {
-                    ticket_img.innerHTML = "<img src='./Images/ticket_image/"+obj.result['image']+"' alt='Image du billet'/>";
+                const content = document.querySelector('#contenu-billet');
+                content.innerHTML = "";
+                for(let i = 0; i < obj.content.length; i++){
+                    content.innerHTML += obj.content[i];
+                }
+                if (obj.ticket['image'] != null) {
+                    ticket_img.innerHTML = "<img src='./Images/ticket_image/"+obj.ticket['image']+"' alt='Image du billet'/>";
                 }
                 let colorPage = utils.getCookie('colorPage');
                     switch (colorPage) {
@@ -58,7 +64,7 @@ function initTicket() {
                     '/comments/countComments','GET',{billet_id:ticket_id},
                     function (obj) {
                         if ( !('error' in obj) ) {
-                            lastPageNumber = Math.ceil(obj.result[0][0]/commentsPerPage) -1;
+                            lastPageNumber = Math.ceil(obj.ticket[0][0]/commentsPerPage) -1;
                         }
                     }
                 )

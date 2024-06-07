@@ -7,15 +7,8 @@
 
 #add-image-span, #button-del{
   display: flex;
-  width: 50%;
   font-size: small;
   margin: 0px;
-}
-
-#preview {
-  font-weight: normal;
-  padding: 10px;
-  color: gray;
 }
 
 #form-card form{
@@ -29,17 +22,6 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-}
-
-#form-card .text-div {
-  flex-direction: row;
-  display: flex;
-  padding: 10px;
-  align-items: center;
-}
-
-#form-card textarea {
-  resize: none;
 }
 
 #form-card .input {
@@ -59,12 +41,12 @@
 
 #form-card {
   background-color: transparent;
-  width: 60%;
   margin: 30px;
   padding: 10px;
   color: black;
   text-align: center;
   font-weight: bold;
+  min-width: calc(100% - 80px);
 }
 
 #central{
@@ -98,9 +80,7 @@ footer {
 }
 
 input[type=file] {
-  opacity: 0;
-  width: 0.1px;
-	height: 0.1px;
+  display: none;
 }
 
 label[for=addImage] {
@@ -116,7 +96,6 @@ label[for=addImage] {
 button{
   padding:5px 15px; 
   font-weight: bold;
-  width: 100%;
   background:rgb(235,235,235); 
   border:0 none;
   cursor:pointer;

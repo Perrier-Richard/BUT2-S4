@@ -29,7 +29,7 @@ class Ticket {
     }
     // CREATE
     public function createTicket() {
-        $stmt = $this -> conn -> prepare("INSERT INTO ". $this -> db_table ." (titre,content) VALUES (:title, :content)");
+        $stmt = $this -> conn -> prepare("INSERT INTO ". $this -> db_table ." (titre, content) VALUES (:title, :content)");
 
         $stmt -> bindParam(":title", $this -> title, PDO::PARAM_STR);
         $stmt -> bindParam(":content", $this -> content, PDO::PARAM_STR);
