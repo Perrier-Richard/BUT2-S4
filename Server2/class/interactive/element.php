@@ -63,9 +63,10 @@ abstract class Element{
 
 		$str = "";
 
-		foreach($content as $value){
-			$str .= $value." ";
+		for($i = 0; $i < count($content) - 1; $i++){
+			$str .= $content[$i].",";
 		}
+		$str .= $content[count($content)];
 
 		return $str;
 	}
@@ -73,8 +74,6 @@ abstract class Element{
 	protected function setId($id){
 		$this -> id = $id;
 	} 
-
-	abstract protected function getIdAstract();
 
 	protected function getId(){
 		return $this -> id;

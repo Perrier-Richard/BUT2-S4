@@ -20,13 +20,13 @@ class Image extends Element{
 
 		$billet = parent::getBillet();
 		$type = parent::getType();
-		$content = parent::convertArrayToString(parent::getContent());
+		$content = parent::getContent();
 
         $stmt = $conn -> prepare("INSERT INTO ". $table ." (billet, type, content) VALUES (:billet, :type, :content)");
 
         $stmt -> bindParam(":billet", $billet, PDO::PARAM_INT);
         $stmt -> bindParam(":type", $type, PDO::PARAM_STR);
-        $stmt -> bindParam(":content", $content, PDO::PARAM_STR);
+        $stmt -> bindParam(":content", $content[0], PDO::PARAM_STR);
 
         $stmt -> execute();
 
@@ -38,16 +38,24 @@ class Image extends Element{
 	}
 
 	protected function updateAbstract(){
-        // $stmt = $this -> conn -> prepare("UPDATE ". $this -> db_table ." SET billet = :billet, type = :type, content = :content WHERE id = :id");
+		$conn = parent::getConn();
+		$table = parent::getTable();
 
-        // $stmt -> bindParam(":billet", $this -> title, PDO::PARAM_INT);
-        // $stmt -> bindParam(":type", $this -> type, PDO::PARAM_STR);
-        // $stmt -> bindParam(":content", $this -> content, PDO::PARAM_STR);
-        // $stmt -> bindParam(":id", $this -> id, PDO::PARAM_INT);
+		$billet = parent::getBillet();
+		$type = parent::getType();
+		$content = parent::getContent();
+		$id = parent::getId();
 
-        // $stmt -> execute();
+        $stmt = $conn -> prepare("UPDATE ". $table ." SET billet = :billet, type = :type, content = :content WHERE id = :id");
 
-        // return $stmt;
+        $stmt -> bindParam(":billet", $billet, PDO::PARAM_INT);
+        $stmt -> bindParam(":type", $type, PDO::PARAM_STR);
+        $stmt -> bindParam(":content", $content, PDO::PARAM_STR);
+        $stmt -> bindParam(":id", $id, PDO::PARAM_INT);
+
+        $stmt -> execute();
+
+        return $stmt;
 	}
 
 	protected function deleteAbstract(){
@@ -63,14 +71,17 @@ class Image extends Element{
 	public function convertToHtml() { return convertToHtmlAbstract(); }
 
 	protected function convertToHtmlAbstract(){
-		$html = "
-			<span>Image</span>
-		";
+		$html = '<div class="'.parent::getType().'">';
+		$html .= '<div class="image-preview">';
+		$html .= '<img src="Images/ticket_image/'.parent::getContent().'" style="width: 100%">';
+		$html .= '</div>';
+		$html .= '</div>';
 
 		return $html;
 	}
 
-	public function getId(){ return $this -> getIdAstract(); }
+	public function getId(){ return parent::getId(); }
 
-	protected function getIdAstract() { return parent::getId(); }
+	public function setContent($content) { parent::setContent($content); }
+
 }

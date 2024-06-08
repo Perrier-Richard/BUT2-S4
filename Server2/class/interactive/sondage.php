@@ -61,14 +61,23 @@ class Sondage extends Element{
 	public function convertToHtml() { return convertToHtmlAbstract(); }
 	
 	protected function convertToHtmlAbstract(){
-		$html = "
-			<span>Sondage</span>
-		";
+		$html = '<div class="'.parent::getType().'">';
+
+		$value = explode(",", parent::getContent());
+		for($i = 0; $i < count($value); $i++){
+			if(empty($value)) continue;
+			$html .= '<div class="sondage-choice">';
+			$html .= '<input type="radio">';
+			$html .= '<label>'.$value[$i].'</label>';
+			$html .= '</div>';
+		}
+
+		$html .= '</div>';
 
 		return $html;
 	}
 
-	public function getId(){ return $this -> getIdAstract(); }
+	public function getId(){ return parent::getId(); }
 
-	protected function getIdAstract() { return parent::getId(); }
+	public function setContent($content) { parent::setContent($content); }
 }

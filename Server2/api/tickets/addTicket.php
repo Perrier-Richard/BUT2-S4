@@ -48,33 +48,22 @@
                 if($billetElement == null) continue;
 
                 $billetElement -> create();
-                $itemContent .= $billetElement -> getId()." ";
-            }
+                $billetElementId = $billetElement -> getId();
 
+                $itemContent .= $billetElementId." ";
+
+                if($data[0] == Image::$type){
+                    $billetImageExt = pathinfo($values[0], PATHINFO_EXTENSION);
+                    $billetImageName = $billetElementId.'.'.$billetImageExt;
+                    move_uploaded_file($_FILES[$i]['tmp_name'], '../../../Images/ticket_image/'.$billetImageName);
+                    $billetElement -> setContent($billetImageName);
+                    $billetElement -> update();
+                }
+            }
+            
             $item -> content = $itemContent;
             $item -> updateTicket();
         }
-
-
-
-/*
-        if ($item -> createTicket()) {
-
-
-            if ($_FILES['addImage']['size'] != 0) {
-                move_uploaded_file($_FILES['addImage']['tmp_name'], '../../../Images/ticket_image/' . $item -> id . '.jpg');
-                $item -> image = $item -> id . '.jpg';
-                if ($item -> addImage()) {
-                    $result['result'] = TRUE;
-                } else {
-                    $result['result'] = FALSE;
-                }
-            } else {
-                $result['result'] = TRUE;
-            }
-        } else {
-            $result['result'] = FALSE;
-        }*/
 
         echo json_encode($result);
     }

@@ -20,13 +20,13 @@ class Text extends Element{
 
 		$billet = parent::getBillet();
 		$type = parent::getType();
-		$content = parent::convertArrayToString(parent::getContent());
+		$content = parent::getContent();
 
         $stmt = $conn -> prepare("INSERT INTO ". $table ." (billet, type, content) VALUES (:billet, :type, :content)");
 
         $stmt -> bindParam(":billet", $billet, PDO::PARAM_INT);
         $stmt -> bindParam(":type", $type, PDO::PARAM_STR);
-        $stmt -> bindParam(":content", $content, PDO::PARAM_STR);
+        $stmt -> bindParam(":content", $content[0], PDO::PARAM_STR);
 
         $stmt -> execute();
 
@@ -63,14 +63,16 @@ class Text extends Element{
 	public function convertToHtml() { return convertToHtmlAbstract(); }
 
 	protected function convertToHtmlAbstract(){
-		$html = "
-			<span>Text</span>
-		";
+		$html = '<div class="'.parent::getType().'">';
+		$html .= '<div class="paraph-text">';
+		$html .= '<p>'.parent::getContent().'</p>';
+		$html .= '</div>';
+		$html .= '</div>';
 
 		return $html;
 	}
 
-	public function getId(){ return $this -> getIdAstract(); }
+	public function getId(){ return parent::getId(); }
 
-	protected function getIdAstract() { return parent::getId(); }
+	public function setContent($content) { parent::setContent($content); }
 }

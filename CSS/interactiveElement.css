@@ -50,6 +50,11 @@
 	padding: 10px;
 }
 
+.sondage-div .sondage-choice label{
+	padding: 5px 0 5px 0;
+	margin-left: 10px;
+}
+
 .image-div{
 	padding: 10px 0 10px 0;
 }
