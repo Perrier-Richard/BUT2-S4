@@ -19,11 +19,11 @@
     $result = [];
     
     $data = $_GET;
-
+    
     $item -> id = $data['id'];
 
     $stmt = $item -> getTicket();
-    $stmt2 = Element::getBilletContent($db, $data['id']);
+    $stmt2 = Element::getBilletContent($db, $data['id'], $data['html']);
 
     $result['ticket'] = $stmt -> fetchAll()[0];
     $result['content'] = $stmt2;

@@ -12,6 +12,10 @@
 
         include_once '../../config/database.php';
         include_once '../../class/tickets.php';
+        include_once '../../class/interactive/element.php';
+        include_once '../../class/interactive/text.php';
+        include_once '../../class/interactive/sondage.php';
+        include_once '../../class/interactive/image.php';
 
         $database = new Database();
         $db = $database -> getConnection();
@@ -21,11 +25,24 @@
 
         $data = json_decode(file_get_contents("php://input"));
 
-        $item -> id = $data -> id;
+        $billet = $data -> id;
+        $item -> id = $billet;
 
-        if ($item -> deleteTicket()) {
+        try{
+
+            $elements = Element::getBilletContent($db, $billet, false);
+
+            for($i = 0; $i < count($elements); $i++){
+                $element = Element::buildContent($db, $billet, $elements[$i]['type'], $elements[$i]['content']);
+                if($element == null) continue;
+                $element -> setId($elements[$i]['id']);
+                $element -> delete();    
+            }
+
+            $item -> deleteTicket();
+
             $result['result'] = 'Ticket has been deleted';
-        } else {
+        } catch(Exception $ex){
             $result['result'] =  'Could not delete ticket';
         }
 

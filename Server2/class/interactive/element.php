@@ -22,7 +22,7 @@ abstract class Element{
 
 	abstract protected function convertToHtmlAbstract();
 
-	public static function getBilletContent($db, $billet){
+	public static function getBilletContent($db, $billet, $html){
         $stmt = $db -> prepare("SELECT id, type, content FROM ". Element::$table ." WHERE billet = :billet");
 
         $stmt -> bindParam(":billet", $billet, PDO::PARAM_INT);
@@ -30,12 +30,16 @@ abstract class Element{
         $stmt -> execute();
 
         $elements = $stmt -> fetchAll();
+
+        if(!$html) return $elements;
+
         $result = array();
 
         for($i = 0; $i < count($elements); $i++) {
-        	$element = Element::buildContent($db, $billet, $elements[$i][1], $elements[$i][2]);
+        	$element = Element::buildContent($db, $billet, $elements[$i]['type'], $elements[$i]['content']);
         	if($element == null) continue;
         	$element -> setId($elements[$i][0]);
+
         	array_push($result, $element -> convertToHtmlAbstract());
         }
 
@@ -70,6 +74,16 @@ abstract class Element{
 
 		return $str;
 	}
+
+    protected function getElement() {
+        $stmt = $this -> conn -> prepare("SELECT * FROM ". $this -> db_table ." WHERE id = :id LIMIT 0,1");
+
+        $stmt -> bindParam(":id", $this -> id, PDO::PARAM_INT);
+
+        $stmt -> execute();
+
+        return $stmt;
+    }
 
 	protected function setId($id){
 		$this -> id = $id;

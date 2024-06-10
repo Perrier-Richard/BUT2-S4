@@ -35,13 +35,8 @@
                                 </div>
                             </div>
                             <hr>
-                            <div id="billet-img">
                             </div>
-                            <span id="contenu-billet">Content</span>
-                        </div>
-
-                        <div id="detail-billet">
-                            <!-- Bouton options pour administration -->
+                            <div id="contenu-billet"></div>
                         </div>
 
                     </article>

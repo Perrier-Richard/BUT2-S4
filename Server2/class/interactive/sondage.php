@@ -49,13 +49,18 @@ class Sondage extends Element{
 	}
 
 	protected function deleteAbstract(){
-        // $stmt = $this -> conn -> prepare("DELETE FROM ". $this -> db_table ." WHERE id = :id");
+		$conn = parent::getConn();
+		$table = parent::getTable();
 
-        // $stmt -> bindParam(":id", $this -> id, PDO::PARAM_INT);
+		$id = parent::getId();
 
-        // $stmt -> execute();
+        $stmt = $conn -> prepare("DELETE FROM ". $table ." WHERE id = :id");
 
-        // return $stmt;
+        $stmt -> bindParam(":id", $id, PDO::PARAM_INT);
+
+        $stmt -> execute();
+
+        return $stmt;
 	}
 
 	public function convertToHtml() { return convertToHtmlAbstract(); }
@@ -77,7 +82,8 @@ class Sondage extends Element{
 		return $html;
 	}
 
-	public function getId(){ return parent::getId(); }
+	public function getId() { return parent::getId(); }
+	public function setId($id) { parent::setId($id); }
 
 	public function setContent($content) { parent::setContent($content); }
 }

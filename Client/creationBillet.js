@@ -11,17 +11,32 @@ if (ticket_id == null) {
     document.querySelector('#page-title').innerHTML = "Création d'un billet"
 } else {
     document.querySelector('#page-title').innerHTML = "Edition d'un billet"
-    document.querySelector('#add-image-span').innerHTML = "";
     utils.requeteV2(
-        '/tickets/getTicket','GET',{id:ticket_id},
+        '/tickets/getTicket','GET',{id:ticket_id, html:0},
         function (obj) {
             if ('error' in obj) {
                 console.log(obj.error);
             } else {
-                add_ticket_form.elements.title.value = obj.result['titre']
-                add_ticket_form.elements.content.value = obj.result['content']
+                console.log(obj.ticket);
+                console.log(obj.content);
+
+                add_ticket_form.elements.title.value = obj.ticket['titre'];
+
                 let converter = new showdown.Converter();
-                document.querySelector('#preview').innerHTML = converter.makeHtml(utils.removeTags(obj.result['content']));
+
+                for(let i = 0; i < obj.content.length; i++){
+                    if(obj.content[i]['type'] == "text-div"){
+                        createParaph(obj.content[i]['content']);
+                    }
+
+                    if(obj.content[i]['type'] == "image-div"){
+                        createImage("Images/ticket_image/" + obj.content[i]['content']);
+                    }
+
+                    if(obj.content[i]['type'] == "sondage-div"){
+                        createSondage(obj.content[i]['content']);
+                    }
+                }
             }
         }
     )
@@ -48,6 +63,47 @@ add_ticket_form.addEventListener('submit',(event) => {
     const title = add_ticket_form.elements.title.value;
     formData.append("title", title);
 
+    createFormData(formData);
+
+    for (const pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+    }
+
+    if (ticket_id == null) {
+        console.log("add");
+        fetch('./Server2/api/tickets/addTicket.php', {
+            method: 'POST',
+            body: formData
+        }).then(function(response) {
+            return response.json();
+        }).then((obj) => {
+            console.log(obj);
+
+            if ('error' in obj) {
+                console.log(obj.error);
+            } else {
+                if (obj.result != false) {
+                    window.location.href = "index.php";
+                }
+            }
+        });
+    } else {
+        console.log("update");
+        utils.requeteV2(
+            '/tickets/updateTicket','PATCH',{id:ticket_id},
+            function (obj) {
+                console.log(obj);
+                // if ('error' in obj) {
+                //     console.log(obj.error);
+                // } else {
+                //     window.location.href = "billet.php?id="+ticket_id;
+                // }
+            }
+        )
+    }
+});
+
+function createFormData(formData){
     const content_div = text_area_holder.getElementsByTagName("div");
     let count = 0;
 
@@ -102,41 +158,10 @@ add_ticket_form.addEventListener('submit',(event) => {
         count++;
     }
 
-    for (const pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-    }
+    return formData;
+}
 
-    if (ticket_id == null) {
-        fetch('./Server2/api/tickets/addTicket.php', {
-            method: 'POST',
-            body: formData
-        }).then(function(response) {
-            return response.json();
-        }).then((obj) => {
-            console.log(obj);
-
-            // if ('error' in obj) {
-            //     console.log(obj.error);
-            // } else {
-            //     if (obj.result != false) {
-            //         window.location.href = "index.php";
-            //     }
-            // }
-        });
-    } else {
-        utils.requeteV2(
-            '/tickets/updateTicket','PATCH',{id:ticket_id,title:title,content:content},
-            function (obj) {
-                if ('error' in obj) {
-                    console.log(obj.error);
-                } else {
-                    window.location.href = "billet.php?id="+ticket_id;
-                }
-            }
-        )
-    }
-});
-
+//----------------------------------\\
 
 const add_paraph = document.querySelector("#addParaph");
 const add_image = document.querySelector("#addImage");
@@ -145,6 +170,24 @@ const add_sondage = document.querySelector("#addSondage");
 add_paraph.addEventListener('click', (e) => {
     e.preventDefault();
 
+    createParaph();
+});
+
+add_image.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    createImage();
+});
+
+add_sondage.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    createSondage();
+});
+
+//----------------------------------\\
+
+function createParaph(text){
     const newParaph = `
         <textarea id="edit-text" class="input" maxlength="5000" name="content" rows="7" cols="30"></textarea>
         <div id="preview"></div>
@@ -179,13 +222,18 @@ add_paraph.addEventListener('click', (e) => {
 
         text_area_holder.removeChild(divParaph);
     });
-});
 
-add_image.addEventListener('click', (e) => {
-    e.preventDefault();
+    if(text){
+        let textArea = divText.querySelector("#edit-text");
+        textArea.value = text;
+    }
 
+    return divParaph;
+}
+
+function createImage(src){
     const newImage = `
-        <img>
+        <img style="width: 80%">
     `;
 
     const divView = document.createElement('div');
@@ -239,11 +287,14 @@ add_image.addEventListener('click', (e) => {
             reader.readAsDataURL(file);
         }
     });
-});
 
-add_sondage.addEventListener('click', (e) => {
-    e.preventDefault();
+    if(src){
+        let img = divView.getElementsByTagName("img")[0];
+        img.src = src;
+    }
+}
 
+function createSondage(choices){
     const newSondage = `
         <input type="radio">
         <input type="text" id="choice">
@@ -270,7 +321,24 @@ add_sondage.addEventListener('click', (e) => {
     actionChoiceButton.appendChild(removeChoiceButton)
 
     divSondage.appendChild(actionChoiceButton);
-    divSondage.appendChild(divChoice);
+
+    if(choices){
+        const choicesSplit = choices.split(",");
+
+        for(let i = 0; i < choicesSplit.length; i++){
+            let divChoice = document.createElement('div');
+            divChoice.classList.add("sondage-choice");
+            divChoice.innerHTML = newSondage;
+
+            divSondage.appendChild(divChoice);
+
+            let inputText = divChoice.querySelector("#choice");
+            inputText.value = choicesSplit[i];
+        }
+    }else{
+        divSondage.appendChild(divChoice);
+        divSondage.appendChild(divChoice);
+    }
 
     addChoiceButton.addEventListener('click', (e) => {
         e.preventDefault();
@@ -293,4 +361,6 @@ add_sondage.addEventListener('click', (e) => {
             text_area_holder.removeChild(divSondage);
         }
     });
-});
+
+    return divSondage;
+}

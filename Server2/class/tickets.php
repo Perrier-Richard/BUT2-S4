@@ -11,7 +11,6 @@ class Ticket {
     public $title;
     public $content;
     public $date;
-    public $image;
 
     public function __construct($db) {
         $this -> conn = $db;
@@ -80,13 +79,6 @@ class Ticket {
     // DELETE
     public function deleteTicket() {
         $stmt = $this -> conn -> prepare("DELETE FROM ". $this -> db_table ." WHERE id = :id");
-
-        $settings = $this -> getTicket();
-        $settings = $settings -> fetch(PDO::FETCH_ASSOC);
-
-        if ($settings['image'] != null) {
-            unlink('../../../Images/ticket_image/' . $settings['image']);
-        }
 
         $stmt -> bindParam(":id", $this -> id, PDO::PARAM_INT);
 

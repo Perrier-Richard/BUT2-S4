@@ -2,7 +2,6 @@ import * as utils from "./utils.js";
 const add_comment_form = document.querySelector('#form-commentaire');
 const comment_list = document.querySelector('#list-comment');
 const ticket_id = new URLSearchParams(window.location.search).get('id');
-const ticket_img = document.querySelector('#billet-img');
 
 
 /**
@@ -36,21 +35,20 @@ if ( window.screen.availWidth <= 600 ) {
  */
 function initTicket() {
     utils.requeteV2(
-        '/tickets/getTicket','GET',{id:ticket_id},
+        '/tickets/getTicket','GET',{id:ticket_id, html:1},
         function (obj) {
             if ( !('error' in obj) ) {
                 console.log(obj);
                 console.log(obj.content);
+
                 document.querySelector('#titre-billet').innerHTML = obj.ticket['titre'];
                 let converter = new showdown.Converter();
                 const content = document.querySelector('#contenu-billet');
-                content.innerHTML = "";
+
                 for(let i = 0; i < obj.content.length; i++){
                     content.innerHTML += obj.content[i];
                 }
-                if (obj.ticket['image'] != null) {
-                    ticket_img.innerHTML = "<img src='./Images/ticket_image/"+obj.ticket['image']+"' alt='Image du billet'/>";
-                }
+
                 let colorPage = utils.getCookie('colorPage');
                     switch (colorPage) {
                         case "night":
@@ -151,6 +149,8 @@ function initComments(page) {
                         utils.requeteV2(
                             '/tickets/deleteTicket','DELETE',{id:ticket_id},
                             function (obj) {
+                                console.log(obj);
+
                                 if ('error' in obj) {
                                     console.log(obj.error);
                                 } else {

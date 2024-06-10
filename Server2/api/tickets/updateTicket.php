@@ -20,17 +20,18 @@
 
         $data = json_decode(file_get_contents("php://input"));
 
-        $item -> id = $data -> id;
-        $item -> title = $data -> title;
-        $item -> content = $data -> content;
+        // $item -> id = $data -> id;
+        // $item -> title = $data -> title;
+        // $item -> content = $data -> content;
 
         $result = [];
+        $result[0] = $data;
 
-        if ($item -> updateTicket()) {
-            $result['result'] = TRUE;
-        } else {
-            $result['result'] = FALSE;
-        }
+        // if ($item -> updateTicket()) {
+        //     $result['result'] = TRUE;
+        // } else {
+        //     $result['result'] = FALSE;
+        // }
 
         echo json_encode($result);
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Sam 08 Juin 2024 à 11:34
+-- Généré le :  Lun 10 Juin 2024 à 16:03
 -- Version du serveur :  5.7.11
 -- Version de PHP :  7.0.3
 
@@ -30,16 +30,15 @@ CREATE TABLE `billet` (
   `id` int(11) NOT NULL,
   `titre` varchar(60) NOT NULL,
   `content` varchar(5000) NOT NULL DEFAULT '',
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `image` varchar(255) DEFAULT NULL
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `billet`
 --
 
-INSERT INTO `billet` (`id`, `titre`, `content`, `date`, `image`) VALUES
-(1, 'Michou VLOG', '1 2 3 4 5 ', '2024-06-08 11:24:00', NULL);
+INSERT INTO `billet` (`id`, `titre`, `content`, `date`) VALUES
+(1, 'Michou VLOG', '1 2 3 4 5 ', '2024-06-08 11:24:00');
 
 -- --------------------------------------------------------
 
@@ -98,6 +97,18 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `username`, `password`) VALUES
 (2, 'admin', '1f40fc92da241694750979ee6cf582f2d5d7d28e18335de05abc54d0560e0f5302860c652bf08d560252aa5e74210546f369fbbbce8c12cfc7957b2652fe9a75');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user_billet`
+--
+
+CREATE TABLE `user_billet` (
+  `id` int(11) NOT NULL,
+  `billet_content` int(11) NOT NULL,
+  `response` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Index pour les tables exportées
 --
@@ -130,6 +141,12 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `user_billet`
+--
+ALTER TABLE `user_billet`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT pour les tables exportées
 --
 
@@ -137,12 +154,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `billet`
 --
 ALTER TABLE `billet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT pour la table `billet_content`
 --
 ALTER TABLE `billet_content`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT pour la table `commentaire`
 --
@@ -153,6 +170,11 @@ ALTER TABLE `commentaire`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT pour la table `user_billet`
+--
+ALTER TABLE `user_billet`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Contraintes pour les tables exportées
 --
