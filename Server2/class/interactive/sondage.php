@@ -8,9 +8,9 @@ class Sondage extends Element{
 		parent::__construct($db);
 	}
 
-	public function create() { $this -> createAbstract(); }
-	public function update() { $this -> updateAbstract(); }
-	public function delete() { $this -> deleteAbstract(); }
+	public function create() { return $this -> createAbstract(); }
+	public function update() { return $this -> updateAbstract(); }
+	public function delete() { return $this -> deleteAbstract(); }
 
 	protected function createAbstract(){
 		$conn = parent::getConn();
@@ -36,16 +36,24 @@ class Sondage extends Element{
 	}
 
 	protected function updateAbstract(){
-        // $stmt = $this -> conn -> prepare("UPDATE ". $this -> db_table ." SET billet = :billet, type = :type, content = :content WHERE id = :id");
+		$conn = parent::getConn();
+		$table = parent::getTable();
 
-        // $stmt -> bindParam(":billet", $this -> title, PDO::PARAM_INT);
-        // $stmt -> bindParam(":type", $this -> title, PDO::PARAM_STR);
-        // $stmt -> bindParam(":content", $this -> content, PDO::PARAM_STR);
-        // $stmt -> bindParam(":id", $this -> id, PDO::PARAM_INT);
+		$billet = parent::getBillet();
+		$type = parent::getType();
+		$content = parent::convertArrayToString(parent::getContent());
+		$id = parent::getId();
 
-        // $stmt -> execute();
+        $stmt = $conn -> prepare("UPDATE ". $table ." SET billet = :billet, type = :type, content = :content WHERE id = :id");
 
-        // return $stmt;
+        $stmt -> bindParam(":billet", $billet, PDO::PARAM_INT);
+        $stmt -> bindParam(":type", $type, PDO::PARAM_STR);
+        $stmt -> bindParam(":content", $content, PDO::PARAM_STR);
+        $stmt -> bindParam(":id", $id, PDO::PARAM_INT);
+
+        $stmt -> execute();
+
+        return $stmt;
 	}
 
 	protected function deleteAbstract(){

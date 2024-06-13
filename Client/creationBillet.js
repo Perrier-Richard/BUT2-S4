@@ -58,12 +58,12 @@ add_ticket_form.elements.addImage.addEventListener('change', (e) => {
 add_ticket_form.addEventListener('submit',(event) => {
     event.preventDefault();
 
-    const formData = new FormData();
+    let formData = new FormData();
 
     const title = add_ticket_form.elements.title.value;
-    formData.append("title", title);
 
-    createFormData(formData);
+    formData = createFormData(formData);
+    formData.append("title", title);
 
     for (const pair of formData.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
@@ -89,17 +89,24 @@ add_ticket_form.addEventListener('submit',(event) => {
         });
     } else {
         console.log("update");
-        utils.requeteV2(
-            '/tickets/updateTicket','PATCH',{id:ticket_id},
-            function (obj) {
-                console.log(obj);
-                // if ('error' in obj) {
-                //     console.log(obj.error);
-                // } else {
-                //     window.location.href = "billet.php?id="+ticket_id;
-                // }
+        formData.append("id", ticket_id);
+
+        fetch('./Server2/api/tickets/updateTicket.php', {
+            method: 'POST',
+            body: formData
+        }).then(function(response) {
+            return response.json();
+        }).then((obj) => {
+            console.log(obj);
+
+            if ('error' in obj) {
+                console.log(obj.error);
+            } else {
+                if (obj.result != false) {
+                    window.location.href = "billet.php?id="+ticket_id;
+                }
             }
-        )
+        });
     }
 });
 
@@ -211,12 +218,6 @@ function createParaph(text){
     let converter = new showdown.Converter();
     const text_div = document.getElementsByClassName("text-div");
 
-    for(let i = 0; i < text_div.length; i++){
-        text_div[i].querySelector('textarea').addEventListener('input', (e) => {
-            text_div[i].querySelector('#preview').innerHTML = converter.makeHtml(utils.removeTags(e.target.value));
-        });
-    }
-
     removeParaph.addEventListener('click', (e) => {
         e.preventDefault();
 
@@ -226,6 +227,14 @@ function createParaph(text){
     if(text){
         let textArea = divText.querySelector("#edit-text");
         textArea.value = text;
+    }
+
+    for(let i = 0; i < text_div.length; i++){
+        text_div[i].querySelector('textarea').addEventListener('input', (e) => {
+            text_div[i].querySelector('#preview').innerHTML = converter.makeHtml(utils.removeTags(e.target.value));
+        });
+
+        text_div[i].querySelector('#preview').innerHTML = converter.makeHtml(utils.removeTags(text_div[i].querySelector('textarea').value));
     }
 
     return divParaph;
@@ -337,6 +346,11 @@ function createSondage(choices){
         }
     }else{
         divSondage.appendChild(divChoice);
+
+        divChoice = document.createElement('div');
+        divChoice.classList.add("sondage-choice");
+        divChoice.innerHTML = newSondage;
+
         divSondage.appendChild(divChoice);
     }
 

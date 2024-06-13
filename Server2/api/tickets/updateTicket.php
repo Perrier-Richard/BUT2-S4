@@ -12,26 +12,82 @@
 
         include_once '../../config/database.php';
         include_once '../../class/tickets.php';
+        include_once '../../class/interactive/element.php';
+        include_once '../../class/interactive/text.php';
+        include_once '../../class/interactive/sondage.php';
+        include_once '../../class/interactive/image.php';
 
         $database = new Database();
         $db = $database -> getConnection();
 
         $item = new Ticket($db);
-
-        $data = json_decode(file_get_contents("php://input"));
-
-        // $item -> id = $data -> id;
-        // $item -> title = $data -> title;
-        // $item -> content = $data -> content;
+        $itemContent = "";
 
         $result = [];
-        $result[0] = $data;
 
-        // if ($item -> updateTicket()) {
-        //     $result['result'] = TRUE;
-        // } else {
-        //     $result['result'] = FALSE;
-        // }
+        try{
+            $billet = $_POST['id'];
+            $item -> id = $billet;
+            $item -> title = $_POST['title'];
+
+            $elements = Element::getBilletContent($db, $billet, false);
+
+            for($i = 0; $i < count($_POST) - 2; $i++){
+                $data = explode(",", $_POST[$i]);
+                $values = [];
+
+                for($j = 1; $j < count($data); $j++){
+                   $values[$j - 1] = $data[$j]; 
+                }
+
+                if($data[0] == Image::$type){
+                    if(!isset($_FILES[$i]['name'])){
+                        $itemContent .= $elements[$i]['id']." ";
+                        continue;
+                    } 
+                    $values = [];
+                    $values[0] = $_FILES[$i]['name'];
+                }
+
+                $billetElement = Element::buildContent($db, $billet, $data[0], $values);
+                if($billetElement == null) continue;
+
+                if(!isset($elements[$i]['id'])){
+                    $billetElement -> create();
+                }else{
+                    $billetElement -> setId($elements[$i]['id']);
+                    $billetElement -> update();
+
+                    if($elements[$i]['type'] == Image::$type && $elements[$i]['content'] != null){
+                        unlink('../../../Images/ticket_image/' . $elements[$i]['content']);
+                    }
+                }
+
+                $billetElementId = $billetElement -> getId();
+                $itemContent .= $billetElementId." ";
+
+                if($data[0] == Image::$type){
+                    $billetImageExt = pathinfo($values[0], PATHINFO_EXTENSION);
+                    $billetImageName = $billetElementId.'.'.$billetImageExt;
+                    move_uploaded_file($_FILES[$i]['tmp_name'], '../../../Images/ticket_image/'.$billetImageName);
+                    $billetElement -> setContent([$billetImageName]);
+                    $billetElement -> update();
+                }
+            }
+
+            $item -> content = $itemContent;
+            $item -> updateTicket();
+
+            for($i = count($_POST) - 2; $i < count($elements); $i++){
+                $billetElement = Element::buildContent($db, $billet, $elements[$i]['type'], $elements[$i]['content']);
+                $billetElement -> setId($elements[$i]['id']);
+                $billetElement -> delete();
+            }
+
+            $result['result'] = TRUE;
+        } catch(Exception $e){
+            $result['result'] = FALSE;
+        }
 
         echo json_encode($result);
 

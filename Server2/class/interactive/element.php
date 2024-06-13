@@ -38,7 +38,7 @@ abstract class Element{
         for($i = 0; $i < count($elements); $i++) {
         	$element = Element::buildContent($db, $billet, $elements[$i]['type'], $elements[$i]['content']);
         	if($element == null) continue;
-        	$element -> setId($elements[$i][0]);
+        	$element -> setId($elements[$i]['type']);
 
         	array_push($result, $element -> convertToHtmlAbstract());
         }
@@ -63,14 +63,14 @@ abstract class Element{
 	}
 
 	protected function convertArrayToString($content){
-		if($content == null or $content == "") return "";
+		if($content == null or $content == "" or count($content) == 0) return "";
 
 		$str = "";
 
 		for($i = 0; $i < count($content) - 1; $i++){
 			$str .= $content[$i].",";
 		}
-		$str .= $content[count($content)];
+		$str .= $content[count($content) - 1];
 
 		return $str;
 	}

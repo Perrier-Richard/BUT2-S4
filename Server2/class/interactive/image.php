@@ -10,9 +10,9 @@ class Image extends Element{
 		parent::__construct($db);
 	}
 
-	public function create() { $this -> createAbstract(); }
-	public function update() { $this -> updateAbstract(); }
-	public function delete() { $this -> deleteAbstract(); }
+	public function create() { return $this -> createAbstract(); }
+	public function update() { return $this -> updateAbstract(); }
+	public function delete() { return $this -> deleteAbstract(); }
 
 	protected function createAbstract(){
 		$conn = parent::getConn();
@@ -50,7 +50,7 @@ class Image extends Element{
 
         $stmt -> bindParam(":billet", $billet, PDO::PARAM_INT);
         $stmt -> bindParam(":type", $type, PDO::PARAM_STR);
-        $stmt -> bindParam(":content", $content, PDO::PARAM_STR);
+        $stmt -> bindParam(":content", $content[0], PDO::PARAM_STR);
         $stmt -> bindParam(":id", $id, PDO::PARAM_INT);
 
         $stmt -> execute();

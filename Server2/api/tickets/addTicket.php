@@ -57,7 +57,7 @@
                         $billetImageExt = pathinfo($values[0], PATHINFO_EXTENSION);
                         $billetImageName = $billetElementId.'.'.$billetImageExt;
                         move_uploaded_file($_FILES[$i]['tmp_name'], '../../../Images/ticket_image/'.$billetImageName);
-                        $billetElement -> setContent($billetImageName);
+                        $billetElement -> setContent([$billetImageName]);
                         $billetElement -> update();
                     }
                 }
