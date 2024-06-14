@@ -68,26 +68,84 @@ class Sondage extends Element{
 
         $stmt -> execute();
 
+        $stmt2 = $conn -> prepare("DELETE FROM ". Element::$user_table ." WHERE billet_content = :billet_content");
+
+        $stmt2 -> bindParam(":billet_content", $id, PDO::PARAM_INT);
+
+        $stmt2 -> execute();
+
         return $stmt;
 	}
 
 	public function convertToHtml() { return convertToHtmlAbstract(); }
 	
 	protected function convertToHtmlAbstract(){
-		$html = '<div class="'.parent::getType().'">';
+		$conn = parent::getConn();
+		$billet = parent::getBillet();
+
+		$id = parent::getId();
+
+		$html = '<form class="'.parent::getType().'">';
+
+		if (isset($_SESSION['LOGGED_USER'])) {
+			$userValueExit = Element::getUserInteraction($conn, $_SESSION['LOGGED_USER'], $billet, $id);
+			if(count($userValueExit) > 0){
+				$userValue = $userValueExit[0]['value'];
+
+				$allUserValue = $this -> getStats($conn, $billet, $id);
+				$totalUserValue = 0;
+
+				for($i = 0; $i < count($allUserValue); $i++){
+					$totalUserValue += $allUserValue[$i][1];
+				}
+			}
+		}
 
 		$value = explode(",", parent::getContent());
+
 		for($i = 0; $i < count($value); $i++){
 			if(empty($value)) continue;
 			$html .= '<div class="sondage-choice">';
-			$html .= '<input type="radio">';
+
+			if(isset($userValue)){
+				$find = false;
+				for($j = 0; $j < count($allUserValue); $j++){
+					if($value[$i] == $allUserValue[$j][0]){
+						$html .= '<p>'.round(($allUserValue[$j][1] / $totalUserValue) * 100).'%</p>';
+						$find = true;
+						break;
+					}
+				}
+				if($find == false) $html .= '<p>0%</p>';
+			}
+
+			if(isset($userValue) && $value[$i] == $userValue){
+				$html .= '<input type="radio" name="'.$id.'" checked disabled>';
+			}
+			else if(isset($userValue)){
+				$html .= '<input type="radio" name="'.$id.'" disabled>';
+			}	
+			else{
+				$html .= '<input type="radio" name="'.$id.'">';
+			}
 			$html .= '<label>'.$value[$i].'</label>';
 			$html .= '</div>';
 		}
 
-		$html .= '</div>';
+		$html .= '</form>';
 
 		return $html;
+	}
+
+	public function getStats($db, $billet, $billet_content){
+		$stmt = $db -> prepare("SELECT value, COUNT(*) FROM ". Element::$user_table ." WHERE billet = :billet AND billet_content = :billet_content GROUP BY value");
+
+		$stmt -> bindParam(":billet", $billet, PDO::PARAM_INT);
+		$stmt -> bindParam(":billet_content", $billet_content, PDO::PARAM_INT);
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll();
 	}
 
 	public function getId() { return parent::getId(); }

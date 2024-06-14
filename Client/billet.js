@@ -44,6 +44,7 @@ function initTicket() {
                 document.querySelector('#titre-billet').innerHTML = obj.ticket['titre'];
                 let converter = new showdown.Converter();
                 const content = document.querySelector('#contenu-billet');
+                content.innerHTML = "";
 
                 for(let i = 0; i < obj.content.length; i++){
                     content.innerHTML += obj.content[i];
@@ -71,7 +72,6 @@ function initTicket() {
             }
         }
     )
-
 }
 
 /**
@@ -231,6 +231,38 @@ function initComments(page) {
     })
 });
 
+ function initElements(){
+    setTimeout(() => {
+        const sondages = document.querySelectorAll(".sondage-div");
 
-initTicket()
-initComments(0)
+        sondages.forEach((sondage) => {
+
+            let radios = sondage.querySelectorAll('input[type="radio"]');
+            console.log(radios);
+            radios.forEach((radio) => {
+                radio.addEventListener('change', () => {
+                    console.log(radio.parentElement);
+                    const radioText = radio.parentElement.querySelector('label');
+
+                    utils.requeteV2(
+                        '/interactive/addInteract','POST',{billet_id:ticket_id, element_id:radio.name, value:radioText.innerText},
+                        function (obj) {
+                            console.log(obj);
+                            if ('error' in obj) {
+                                console.log(obj.error);
+                            } else {
+                                initTicket();
+                                initComments(0);
+                            }
+                        }
+                    ) 
+                });
+            });
+        });
+    }, 1000);
+ }
+
+
+initTicket();
+initComments(0);
+document.addEventListener("DOMContentLoaded", initElements());

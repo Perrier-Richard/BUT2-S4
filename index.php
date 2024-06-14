@@ -30,7 +30,6 @@
                         <div class="selector">
                             <div class="text-billet">
                                 <span class="titre-billet">Titre</span>
-                                <span class="contenu-billet">Content</span>
                             </div>
                             <div class="detail-billet">
                                 <span class="post-date">00/00/0000</span>

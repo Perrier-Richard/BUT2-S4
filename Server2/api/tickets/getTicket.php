@@ -4,6 +4,10 @@
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: GET");
 
+    if (session_status() != PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
     include_once '../../config/database.php';
     include_once '../../class/tickets.php';
     include_once '../../class/interactive/element.php';

@@ -39,6 +39,7 @@
 .sondage-div .sondage-choice{
 	padding: 5px 0 5px 0;
 	display: inline-flex;
+	justify-content: center;
 }
 
 .sondage-div .sondage-choice input[type=radio]{
@@ -51,8 +52,13 @@
 }
 
 .sondage-div .sondage-choice label{
-	padding: 5px 0 5px 0;
+	padding-left: 15px;
 	margin-left: 10px;
+	margin: auto 0;
+}
+
+.sondage-div .sondage-choice p{
+	min-width: 15%;
 }
 
 .image-div{

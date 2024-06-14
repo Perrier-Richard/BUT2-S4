@@ -75,6 +75,12 @@ class Image extends Element{
 
         $stmt -> execute();
 
+        $stmt2 = $conn -> prepare("DELETE FROM ". Element::$user_table ." WHERE billet_content = :billet_content");
+
+        $stmt2 -> bindParam(":billet_content", $id, PDO::PARAM_INT);
+
+        $stmt2 -> execute();
+
         return $stmt;
 	}
  
